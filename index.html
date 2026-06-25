@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Name — .NET Full Stack Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #050d1a;
+      --bg2:        #0a1628;
+      --bg3:        #0f1f38;
+      --accent:     #3b82f6;
+      --accent2:    #60a5fa;
+      --accent-dim: rgba(59,130,246,0.12);
+      --text:       #e2e8f0;
+      --muted:      #64748b;
+      --border:     rgba(59,130,246,0.18);
+      --mono:       'JetBrains Mono', monospace;
+      --sans:       'Space Grotesk', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.2rem 6%;
+      background: rgba(5,13,26,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 1rem;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none;
+      font-size: 0.9rem; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent2); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 0 6%;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -20%; right: -10%;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-content { max-width: 700px; }
+    .hero-eyebrow {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 32px; height: 1px;
+      background: var(--accent);
+    }
+    h1 {
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+    }
+    h1 span { color: var(--accent); }
+    .hero-desc {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 520px;
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+    .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn {
+      padding: 0.8rem 1.8rem;
+      border-radius: 6px;
+      font-family: var(--sans);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+    }
+    .btn-primary:hover { background: var(--accent2); transform: translateY(-1px); }
+    .btn-outline {
+      background: transparent;
+      color: var(--accent2);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { background: var(--accent-dim); border-color: var(--accent); }
+
+    /* SECTIONS */
+    section { padding: 6rem 6%; }
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--accent);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+    h2 {
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 3rem;
+    }
+
+    /* ABOUT */
+    .about { background: var(--bg2); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .about-text p {
+      color: var(--muted);
+      margin-bottom: 1rem;
+      line-height: 1.8;
+    }
+    .about-text p strong { color: var(--text); }
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    .stat-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+    }
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+      font-family: var(--mono);
+    }
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 0.25rem;
+    }
+
+    /* SKILLS */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+    .skill-category {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.8rem;
+      transition: border-color 0.2s;
+    }
+    .skill-category:hover { border-color: var(--accent); }
+    .skill-category h3 {
+      font-size: 0.85rem;
+      font-family: var(--mono);
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .tag {
+      background: var(--accent-dim);
+      color: var(--accent2);
+      border: 1px solid rgba(59,130,246,0.2);
+      padding: 0.3rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.82rem;
+      font-family: var(--mono);
+    }
+
+    /* PROJECTS */
+    .projects { background: var(--bg2); }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+    .project-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 2rem;
+      transition: all 0.2s;
+      display: flex; flex-direction: column;
+    }
+    .project-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+    }
+    .project-header {
+      display: flex; justify-content: space-between;
+      align-items: flex-start; margin-bottom: 1rem;
+    }
+    .project-icon {
+      width: 42px; height: 42px;
+      background: var(--accent-dim);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+    }
+    .project-links { display: flex; gap: 0.75rem; }
+    .project-links a {
+      color: var(--muted); text-decoration: none;
+      font-size: 0.8rem; font-family: var(--mono);
+      transition: color 0.2s;
+    }
+    .project-links a:hover { color: var(--accent2); }
+    .project-card h3 {
+      font-size: 1.1rem; font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .project-card p {
+      color: var(--muted); font-size: 0.9rem;
+      line-height: 1.6; flex: 1;
+      margin-bottom: 1.5rem;
+    }
+    .project-stack { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .stack-tag {
+      background: var(--bg3);
+      color: var(--muted);
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-family: var(--mono);
+    }
+
+    /* RESUME */
+    .resume-section { text-align: center; }
+    .resume-card {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 3rem 4rem;
+      margin-top: 1rem;
+    }
+    .resume-icon { font-size: 3rem; }
+    .resume-card p { color: var(--muted); font-size: 0.95rem; }
+
+    /* CONTACT */
+    .contact { background: var(--bg2); text-align: center; }
+    .contact-desc {
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto 2.5rem;
+      font-size: 1rem;
+    }
+    .contact-links {
+      display: flex; justify-content: center;
+      gap: 1.5rem; flex-wrap: wrap;
+    }
+    .contact-link {
+      display: flex; align-items: center; gap: 0.5rem;
+      color: var(--muted); text-decoration: none;
+      font-family: var(--mono); font-size: 0.9rem;
+      padding: 0.75rem 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+    .contact-link:hover {
+      color: var(--accent2);
+      border-color: var(--accent);
+      background: var(--accent-dim);
+    }
+
+    /* FOOTER */
+    footer {
+      padding: 2rem 6%;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    footer p { color: var(--muted); font-size: 0.82rem; font-family: var(--mono); }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      nav { padding: 1rem 5%; }
+      .nav-links { gap: 1.2rem; }
+      section { padding: 4rem 5%; }
+      .resume-card { padding: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <span class="nav-logo">// yourname.dev</span>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#resume">Resume</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-eyebrow">Available for opportunities</div>
+      <h1>Your Name<br/><span>.NET Full Stack</span><br/>Developer</h1>
+      <p class="hero-desc">
+        Building scalable web applications with <strong>.NET, Azure, and modern frontend technologies.</strong>
+        From API design to cloud deployment — end to end.
+      </p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn btn-primary">View Projects →</a>
+        <a href="./resume.pdf" download="YourName_Resume.pdf" class="btn btn-outline">⬇ Download Resume</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="section-label">01 — About</div>
+    <h2>Who I Am</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>I'm a <strong>.NET Full Stack Developer</strong> with a passion for building clean, performant web applications. I work across the entire stack — from designing RESTful APIs with ASP.NET Core to crafting responsive UIs and deploying on Azure.</p>
+        <p>I believe in writing maintainable code, understanding the infrastructure it runs on, and continuously learning. Recently I've been exploring <strong>Azure cloud services</strong>, CI/CD pipelines, and serverless architectures.</p>
+        <p>When I'm not coding, I'm documenting what I learn and building projects that solve real problems.</p>
+      </div>
+      <div class="about-stats">
+        <div class="stat-card">
+          <div class="stat-number">3+</div>
+          <div class="stat-label">Years Experience</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">10+</div>
+          <div class="stat-label">Projects Built</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">Azure</div>
+          <div class="stat-label">Cloud Platform</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">CI/CD</div>
+          <div class="stat-label">GitHub Actions</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="section-label">02 — Skills</div>
+    <h2>Tech Stack</h2>
+    <div class="skills-grid">
+      <div class="skill-category">
+        <h3>Backend</h3>
+        <div class="skill-tags">
+          <span class="tag">C#</span>
+          <span class="tag">ASP.NET Core</span>
+          <span class="tag">Web API</span>
+          <span class="tag">Entity Framework</span>
+          <span class="tag">SignalR</span>
+        </div>
+      </div>
+      <div class="skill-category">
+        <h3>Frontend</h3>
+        <div class="skill-tags">
+          <span class="tag">React</span>
+          <span class="tag">TypeScript</span>
+          <span class="tag">HTML/CSS</span>
+          <span class="tag">Blazor</span>
+          <span class="tag">JavaScript</span>
+        </div>
+      </div>
+      <div class="skill-category">
+        <h3>Cloud — Azure</h3>
+        <div class="skill-tags">
+          <span class="tag">Blob Storage</span>
+          <span class="tag">Azure CDN</span>
+          <span class="tag">Azure Functions</span>
+          <span class="tag">App Service</span>
+          <span class="tag">Azure SQL</span>
+        </div>
+      </div>
+      <div class="skill-category">
+        <h3>DevOps</h3>
+        <div class="skill-tags">
+          <span class="tag">GitHub Actions</span>
+          <span class="tag">Docker</span>
+          <span class="tag">Azure DevOps</span>
+          <span class="tag">CI/CD</span>
+        </div>
+      </div>
+      <div class="skill-category">
+        <h3>Database</h3>
+        <div class="skill-tags">
+          <span class="tag">SQL Server</span>
+          <span class="tag">Azure SQL</span>
+          <span class="tag">Cosmos DB</span>
+          <span class="tag">Redis</span>
+        </div>
+      </div>
+      <div class="skill-category">
+        <h3>Tools</h3>
+        <div class="skill-tags">
+          <span class="tag">Visual Studio</span>
+          <span class="tag">VS Code</span>
+          <span class="tag">Git</span>
+          <span class="tag">Postman</span>
+          <span class="tag">Azure CLI</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="projects" id="projects">
+    <div class="section-label">03 — Projects</div>
+    <h2>What I've Built</h2>
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-icon">🌐</div>
+          <div class="project-links">
+            <a href="#">GitHub ↗</a>
+            <a href="#">Live ↗</a>
+          </div>
+        </div>
+        <h3>Portfolio Site</h3>
+        <p>This site — hosted on Azure Blob Storage with Azure CDN for global edge caching and HTTPS. Deployed automatically via GitHub Actions on every push to main.</p>
+        <div class="project-stack">
+          <span class="stack-tag">Azure Blob</span>
+          <span class="stack-tag">Azure CDN</span>
+          <span class="stack-tag">GitHub Actions</span>
+          <span class="stack-tag">HTML/CSS</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-icon">⚡</div>
+          <div class="project-links">
+            <a href="#">GitHub ↗</a>
+            <a href="#">Live ↗</a>
+          </div>
+        </div>
+        <h3>Serverless REST API</h3>
+        <p>A scalable REST API built with Azure Functions and exposed via API Management. Handles CRUD operations with Azure SQL as the backend database.</p>
+        <div class="project-stack">
+          <span class="stack-tag">Azure Functions</span>
+          <span class="stack-tag">APIM</span>
+          <span class="stack-tag">C#</span>
+          <span class="stack-tag">Azure SQL</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-icon">🔐</div>
+          <div class="project-links">
+            <a href="#">GitHub ↗</a>
+          </div>
+        </div>
+        <h3>Secure Auth System</h3>
+        <p>Full authentication flow using ASP.NET Core Identity with JWT tokens, role-based access control, and Azure AD B2C integration for enterprise login.</p>
+        <div class="project-stack">
+          <span class="stack-tag">ASP.NET Core</span>
+          <span class="stack-tag">Azure AD B2C</span>
+          <span class="stack-tag">JWT</span>
+          <span class="stack-tag">RBAC</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- RESUME -->
+  <section id="resume" class="resume-section">
+    <div class="section-label">04 — Resume</div>
+    <h2>My Resume</h2>
+    <div class="resume-card">
+      <div class="resume-icon">📄</div>
+      <p>Download my full resume as a PDF — includes experience, education, and certifications.</p>
+      <a href="./resume.pdf" download="YourName_Resume.pdf" class="btn btn-primary">⬇ Download Resume (PDF)</a>
+      <a href="./resume.pdf" target="_blank" class="btn btn-outline">View in Browser ↗</a>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="section-label">05 — Contact</div>
+    <h2>Let's Connect</h2>
+    <p class="contact-desc">Open to full-time roles, freelance projects, and collaborations. Feel free to reach out.</p>
+    <div class="contact-links">
+      <a href="mailto:you@email.com" class="contact-link">✉ you@email.com</a>
+      <a href="https://github.com/yourusername" target="_blank" class="contact-link">⌥ GitHub</a>
+      <a href="https://linkedin.com/in/yourprofile" target="_blank" class="contact-link">in LinkedIn</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>// built with HTML + Azure Blob + CDN</p>
+    <p>© 2026 Your Name</p>
+  </footer>
+
+</body>
+</html>

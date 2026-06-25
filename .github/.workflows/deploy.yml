@@ -1,0 +1,74 @@
+name: Deploy Portfolio to Azure
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Pull your code
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # Step 2: Login to Azure using Service Principal
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Step 3: Upload all files to $web container in Blob Storage
+      - name: Upload files to Azure Blob Storage
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            az storage blob upload-batch \
+              --account-name ${{ secrets.STORAGE_ACCOUNT_NAME }} \
+              --source . \
+              --destination '$web' \
+              --overwrite \
+              --pattern "*.html" \
+              --content-type "text/html"
+
+            az storage blob upload-batch \
+              --account-name ${{ secrets.STORAGE_ACCOUNT_NAME }} \
+              --source . \
+              --destination '$web' \
+              --overwrite \
+              --pattern "*.css" \
+              --content-type "text/css"
+
+            az storage blob upload-batch \
+              --account-name ${{ secrets.STORAGE_ACCOUNT_NAME }} \
+              --source . \
+              --destination '$web' \
+              --overwrite \
+              --pattern "*.pdf" \
+              --content-type "application/pdf"
+
+            az storage blob upload-batch \
+              --account-name ${{ secrets.STORAGE_ACCOUNT_NAME }} \
+              --source . \
+              --destination '$web' \
+              --overwrite \
+              --pattern "assets/*"
+
+      # Step 4: Purge CDN cache so changes go live immediately
+      - name: Purge Azure CDN Cache
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            az cdn endpoint purge \
+              --resource-group ${{ secrets.RESOURCE_GROUP }} \
+              --profile-name ${{ secrets.CDN_PROFILE_NAME }} \
+              --name ${{ secrets.CDN_ENDPOINT_NAME }} \
+              --content-paths '/*'
+
+      # Step 5: Print live URL
+      - name: Print Live URL
+        run: |
+          echo "✅ Deployment complete!"
+          echo "🌐 Live at: https://${{ secrets.CDN_ENDPOINT_NAME }}.azureedge.net"
